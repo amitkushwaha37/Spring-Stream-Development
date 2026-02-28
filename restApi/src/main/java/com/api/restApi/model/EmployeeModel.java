@@ -19,10 +19,10 @@ public class EmployeeModel {
 	private Long id;
 	private String name;
 	private String email;
-	private int age;
+	private Integer age;
 	private BigDecimal salary;
 	private LocalDate dob;
-	private boolean active;
+	private Boolean active;
 	
 	
 	

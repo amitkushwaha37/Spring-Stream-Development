@@ -14,5 +14,9 @@ public interface EmployeeService {
 	
 	EmployeeModel updateEmployee(Long id, EmployeeModel employeeModel);
 	
+	EmployeeModel patchUpdateEmployee(Long id, EmployeeModel employeeModel);
+	
 	void deleteEmployee(Long id);
+	
+	
 }
