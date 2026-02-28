@@ -131,23 +131,23 @@ public class EmployeeServiceImpl implements EmployeeService {
 		if (employeeModel.getName() != null) {
 			entity.setName(employeeModel.getName());
 		}
-		;
+		
 		if (employeeModel.getEmail() != null) {
 			entity.setEmail(employeeModel.getEmail());
 		}
-		;
+		
 		if (employeeModel.getSalary() != null) {
 			entity.setSalary(employeeModel.getSalary());
 		}
-		;
+		
 		if (employeeModel.getDob() != null) {
 			entity.setDob(employeeModel.getDob());
 		}
-		;
+		
 		if (employeeModel.getAge() != null) {
 			entity.setAge(employeeModel.getAge());
 		}
-		;
+		
 		
 		if(employeeModel.getActive() != null) {
 		entity.setActive(employeeModel.getActive());
