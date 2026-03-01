@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.api.restApi.model.EmployeeModel;
 import com.api.restApi.model.PaginationModel;
+import com.api.restApi.rabbitMQ.producer.EmployeeProducer;
 import com.api.restApi.service.EmployeeService;
 
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,9 @@ public class EmployeeController {
 
 	@Autowired
 	private EmployeeService employeeService;
+	
+	@Autowired
+	private EmployeeProducer employeeProducer;
 
 	@PostMapping("/createEmployee")
 	public ResponseEntity<EmployeeModel> createEmployee(@RequestBody EmployeeModel employeeModel) {
@@ -108,6 +112,14 @@ public class EmployeeController {
 
 		return ResponseEntity.ok(employee);
 
+	}
+	
+	@GetMapping("/testQueue")
+	public String testQueue() {
+
+	    employeeProducer.sendEmployeeCreatedMessage("Test Message");
+
+	    return "Message Sent";
 	}
 
 }

@@ -12,10 +12,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 
+
 import com.api.restApi.customException.EmployeeNotFoundException;
 import com.api.restApi.entity.EmployeeEntity;
 import com.api.restApi.model.EmployeeModel;
 import com.api.restApi.model.PaginationModel;
+import com.api.restApi.rabbitMQ.producer.EmployeeProducer;
 import com.api.restApi.repository.EmployeeRepository;
 import com.api.restApi.service.EmployeeService;
 
@@ -24,6 +26,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Autowired
 	private EmployeeRepository employeeRepository;
+	
+	@Autowired
+	private EmployeeProducer employeeProducer;
 
 	@Override
 	public EmployeeModel createmployee(EmployeeModel employeeModel) {
@@ -39,6 +44,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 		// Step 2️⃣ Save to database
 		EmployeeEntity savedEntity = employeeRepository.save(employeeEntity);
+		
+		/*
+		Send event message to RabbitMQ
+		*/
+		employeeProducer.sendEmployeeCreatedMessage(
+		        "Employee Created: " + savedEntity.getName()
+		);
 
 		// Step 3️⃣ Convert Entity → Model
 		EmployeeModel response = new EmployeeModel();
