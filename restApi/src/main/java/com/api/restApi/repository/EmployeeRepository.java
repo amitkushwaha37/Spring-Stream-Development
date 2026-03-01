@@ -5,6 +5,8 @@ import org.springframework.stereotype.Repository;
 
 import com.api.restApi.entity.EmployeeEntity;
 
+
+//JpaRepository already provides pagination support
 @Repository
 public interface EmployeeRepository extends JpaRepository<EmployeeEntity, Long>{
 

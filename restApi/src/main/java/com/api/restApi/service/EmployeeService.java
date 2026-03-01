@@ -6,6 +6,7 @@ import java.util.Set;
 import org.springframework.http.HttpMethod;
 
 import com.api.restApi.model.EmployeeModel;
+import com.api.restApi.model.PaginationModel;
 
 public interface EmployeeService {
 
@@ -24,4 +25,7 @@ public interface EmployeeService {
 	boolean isEmployeeExist(Long id);
 
 	Set<HttpMethod> getAllowedMethod();
+	
+	// Pagination Method
+	PaginationModel<EmployeeModel> getPartialEmployees(int page, int size);
 }
