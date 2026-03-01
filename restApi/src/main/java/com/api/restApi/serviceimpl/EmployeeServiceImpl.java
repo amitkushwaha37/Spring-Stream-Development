@@ -1,13 +1,17 @@
 package com.api.restApi.serviceimpl;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.api.restApi.customException.EmployeeNotFoundException;
 import com.api.restApi.entity.EmployeeEntity;
 import com.api.restApi.model.EmployeeModel;
 import com.api.restApi.repository.EmployeeRepository;
@@ -73,13 +77,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public EmployeeModel getemployeeById(Long id) {
-		// 1st way
+		// 1st way 500 not handle exception
 //		EmployeeEntity entity1 = employeeRepository.findById(id)
 //				.orElseThrow(() -> new RuntimeException("Employee Id not found"));
 
 		// 2.way
 		EmployeeEntity entity = employeeRepository.findById(id)
-				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee Id not found"));
+				.orElseThrow(() -> new EmployeeNotFoundException ("Employee Id not found"));
 
 		EmployeeModel employeeModel = new EmployeeModel();
 
@@ -98,7 +102,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public EmployeeModel updateEmployee(Long id, EmployeeModel employeeModel) {
 
 		EmployeeEntity employeeEntity = employeeRepository.findById(id)
-				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee Id Not Found"));
+				.orElseThrow(() -> new EmployeeNotFoundException("Employee Id Not Found"));
 
 		employeeEntity.setName(employeeModel.getName());
 		employeeEntity.setEmail(employeeModel.getEmail());
@@ -126,7 +130,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public EmployeeModel patchUpdateEmployee(Long id, EmployeeModel employeeModel) {
 
 		EmployeeEntity entity = employeeRepository.findById(id)
-				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee Not found"));
+				.orElseThrow(() -> new EmployeeNotFoundException("Employee Not found"));
 
 		if (employeeModel.getName() != null) {
 			entity.setName(employeeModel.getName());
@@ -171,11 +175,42 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public void deleteEmployee(Long id) {
 
 		if (!employeeRepository.existsById(id)) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Employee Not found");
+			throw new EmployeeNotFoundException("Employee Not found");
 		}
 
 		employeeRepository.deleteById(id);
 
+	}
+
+	@Override
+	public boolean isEmployeeExist(Long id) {
+		
+		boolean exists = employeeRepository.existsById(id);
+		
+		if(!exists) {
+			throw new EmployeeNotFoundException("Employee Not found");
+		}
+		
+		return true;
+	}
+	
+	
+	
+
+	@Override
+	public Set<HttpMethod> getAllowedMethod() {
+		
+		Set<HttpMethod> methods = new HashSet<>();
+		
+		methods.add(HttpMethod.GET);
+		methods.add(HttpMethod.POST);
+		methods.add(HttpMethod.PATCH);
+		methods.add(HttpMethod.PUT);
+		methods.add(HttpMethod.DELETE);
+		methods.add(HttpMethod.OPTIONS);
+		methods.add(HttpMethod.HEAD);
+		
+		return methods;
 	}
 
 }

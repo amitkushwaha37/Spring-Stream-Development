@@ -1,8 +1,10 @@
 package com.api.restApi.controller;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,12 +14,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.api.restApi.model.EmployeeModel;
 import com.api.restApi.service.EmployeeService;
 
 import lombok.RequiredArgsConstructor;
+
 
 @RestController
 @RequestMapping("/employees")   // Base URL for all endpoints
@@ -78,5 +82,20 @@ public class EmployeeController {
 		return ResponseEntity.ok("Employee Deleted Successfully");
 	}
 	
+	@RequestMapping(value = "/{id}", method= RequestMethod.HEAD)
+	public ResponseEntity<Void> headEmployee(@PathVariable Long id){
+		
+		employeeService.isEmployeeExist(id);
+		
+		return ResponseEntity.ok().build();
+	}
+	
+	@RequestMapping(value = "/{id}" , method = RequestMethod.OPTIONS)
+	public ResponseEntity<Void> optionsEmployee(){
+		
+		Set<HttpMethod> methods = employeeService.getAllowedMethod();
+		return ResponseEntity.ok().allow(methods.toArray(new HttpMethod[0])).build();
+		
+	}
 	
 }
