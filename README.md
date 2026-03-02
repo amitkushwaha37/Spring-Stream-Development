@@ -192,11 +192,12 @@ Body:
 ```json
 {
   "name": "Amit Kushwaha",
-  "email": "amitkushwaha37@gmail.com",
+  "email": "ak@gmail.com",
   "salary": 500,
   "department": "IT",
   "age": 29,
-  "city": "Navi Mumbai"
+  "dob": "1996-10-28",
+  "active": true
 }
 ```
 
